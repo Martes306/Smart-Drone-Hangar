@@ -5,6 +5,7 @@
 #include "devices/ServoMotor/ServoMotor.h"
 #include "devices/pir/PresenceSensor.h"
 #include "devices/ProximitySensor/ProximitySensor.h"
+#include <WString.h>
 
 class HangarTask : public Task
 {
