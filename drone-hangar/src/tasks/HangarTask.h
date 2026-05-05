@@ -6,12 +6,13 @@
 #include "devices/pir/PresenceSensor.h"
 #include "devices/ProximitySensor/ProximitySensor.h"
 #include <WString.h>
+#include "config.h"
 
 class HangarTask : public Task
 {
 
 public:
-    HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector);
+    HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector, hangar_state* hangarState);
     void tick();
 
 private:
@@ -34,6 +35,7 @@ private:
     ServoMotor* hangarDoor;
     ProximitySensor* droneDistanceDetector;
     PresenceSensor* dronePresenceDetector;
+    hangar_state* hangarState;
 };
 
 #endif

@@ -20,5 +20,4 @@ typedef enum
     ALARM
 } alarm_state;
 
-
 #endif

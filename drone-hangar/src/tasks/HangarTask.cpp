@@ -1,15 +1,18 @@
 #include "HangarTask.h"
 
-HangarTask::HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector)
+HangarTask::HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector, hangar_state* hangarState)
 {
     this->hangarDoor = hangarDoor;
     this->droneDistanceDetector = droneDistanceDetector;
     this->dronePresenceDetector = dronePresenceDetector;
+    this->hangarState = hangarState;
+
     state = INSIDE;
     justEntered = true;
 }
 
-HangarTask::tick()
+
+void HangarTask::tick()
 {
     switch (state)
     {
