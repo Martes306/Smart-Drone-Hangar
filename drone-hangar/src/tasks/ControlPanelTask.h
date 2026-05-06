@@ -4,6 +4,7 @@
 #include "kernel/Task.h"
 #include <LiquidCrystal_I2C.h>
 #include "devices/led/Led.h"
+#include "config.h"
 
 class ControlPanelTask : public Task
 {

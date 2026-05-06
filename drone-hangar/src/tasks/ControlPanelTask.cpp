@@ -1,5 +1,4 @@
 #include "ControlPanelTask.h"
-#include "config.h"
 #include <Arduino.h>
 
 ControlPanelTask::ControlPanelTask(hangar_state *hangarState, alarm_state *alarmState, bool *blinking)
