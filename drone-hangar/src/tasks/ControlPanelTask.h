@@ -9,28 +9,33 @@ class ControlPanelTask : public Task
 {
 
 public:
-    ControlPanelTask();
+    ControlPanelTask(hangar_state *hangarState, alarm_state *alarmState, bool *blinking);
     void tick();
 
 private:
-    void setState(int state);
-    long elapsedTimeInState();
-    void log(const String &msg);
-
-    bool checkAndSetJustEntered();
-
-    enum
+    typedef enum 
     {
         INSIDE,
         TAKEOFF,
         OUTSIDE,
-        LANDING
-    } state;
+        LANDING,
+        ALARM
+    } lcdState;
+
+    void setState(lcdState state);
+    long elapsedTimeInState();
+    void log(const String &msg);
+    bool checkAndSetJustEntered();
+
     long stateTimestamp;
     bool justEntered;
 
-    LiquidCrystal_I2C* lcd;
-    Led* l1;
+    lcdState state;
+    bool *blinking;
+    hangar_state *hangarState;
+    alarm_state *alarmState;
+
+    LiquidCrystal_I2C *lcd;
 };
 
 #endif

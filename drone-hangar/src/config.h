@@ -2,7 +2,9 @@
 #define __CONFIG__
 
 #define BT_PIN 2
-#define LED_PIN 13
+#define L1 13
+#define L2 12
+#define L3 11
 #define MOTOR_PIN 9
 
 typedef enum
@@ -19,5 +21,7 @@ typedef enum
     PRE_ALARM,
     ALARM
 } alarm_state;
+
+bool blinking; 
 
 #endif
