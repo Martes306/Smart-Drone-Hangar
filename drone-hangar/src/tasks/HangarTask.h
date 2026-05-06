@@ -7,35 +7,42 @@
 #include "devices/ProximitySensor/ProximitySensor.h"
 #include <WString.h>
 #include "config.h"
+#include <devices/led/Led.h>
 
 class HangarTask : public Task
 {
 
 public:
-    HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector, hangar_state* hangarState);
+    HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector, Led *led, hangar_state* hangarState);
     void tick();
 
 private:
-    void setState(int state);
-    long elapsedTimeInState();
-    void log(const String &msg);
-
-    bool checkAndSetJustEntered();
-
-    enum
+    typedef enum
     {
         INSIDE,
         TAKEOFF,
         OUTSIDE,
         LANDING
-    } state;
+    } StateOfHangar;
+
+    void setState(StateOfHangar state);
+    long elapsedTimeInState();
+    void log(const String &msg);
+
+    bool checkAndSetJustEntered();
+
+    StateOfHangar state;
     long stateTimestamp;
     bool justEntered;
 
     ServoMotor* hangarDoor;
     ProximitySensor* droneDistanceDetector;
     PresenceSensor* dronePresenceDetector;
+    Led* led;
     hangar_state* hangarState;
+    
+    bool conditionStarted;
+    unsigned long conditionStartTime;
 };
 
 #endif

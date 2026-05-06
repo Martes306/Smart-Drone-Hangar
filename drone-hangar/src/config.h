@@ -7,6 +7,9 @@
 #define L3 11
 #define MOTOR_PIN 9
 
+#define D1 30
+#define T1 5000 // T1 in millisecondi   
+
 typedef enum
 {
     INSIDE,
