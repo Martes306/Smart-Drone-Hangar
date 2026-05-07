@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "drone-remote-unit/lib/jssc-2.9.4.jar"
+    ]
+}
