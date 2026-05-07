@@ -3,13 +3,12 @@
 
 ControlPanelTask::ControlPanelTask(hangar_state *hangarState, alarm_state *alarmState, bool *blinking)
 {
-    state = INSIDE;
-    stateTimestamp = 0;
-    justEntered = false;
+    setState(INSIDE);
+    this->stateTimestamp = 0;
 
-    lcd = new LiquidCrystal_I2C(0x27, 16, 2);
-    lcd->init();
-    lcd->backlight();
+    this->lcd = new LiquidCrystal_I2C(0x27, 16, 2);
+    this->lcd->init();
+    this->lcd->backlight();
     this->blinking = blinking;
     this->hangarState = hangarState;
     this->alarmState = alarmState;
@@ -17,13 +16,56 @@ ControlPanelTask::ControlPanelTask(hangar_state *hangarState, alarm_state *alarm
 
 void ControlPanelTask::tick()
 {
-    if (*alarmState == ALARM)
+    updateState();
+    if (checkAndSetJustEntered())
+    {
+        switch (state)
+        {
+        case INSIDE:
+            *blinking = false;
+            lcd->clear();
+            lcd->setCursor(0, 0);
+            lcd->print("INSIDE");
+            break;
+        case TAKEOFF:
+            *blinking = true;
+            lcd->clear();
+            lcd->setCursor(0, 0);
+            lcd->print("TAKEOFF");
+            break;
+        case OUTSIDE:
+            *blinking = false;
+            lcd->clear();
+            lcd->setCursor(0, 0);
+            lcd->print("OUTSIDE");
+            break;
+        case LANDING:
+            *blinking = false;
+            lcd->clear();
+            lcd->setCursor(0, 0);
+            lcd->print("LANDING");
+            break;
+        case ALARM:
+            *blinking = false;
+            lcd->clear();
+            lcd->setCursor(0, 0);
+            lcd->print("ALARM");
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void ControlPanelTask::updateState()
+{
+    if (this->state != *this->alarmState && *this->alarmState == ALARM)
     {
         setState(ALARM);
     }
-    else
+    else if (this->state != *this->hangarState)
     {
-        switch (*hangarState)
+        switch (*this->hangarState)
         {
         case INSIDE:
             setState(INSIDE);
@@ -40,62 +82,6 @@ void ControlPanelTask::tick()
         default:
             break;
         }
-    }
-    
-    switch (state)
-    {
-    case INSIDE:
-        if (checkAndSetJustEntered())
-        {
-            setState(INSIDE);
-            *blinking = false;
-            lcd->clear();
-            lcd->setCursor(0, 0);
-            lcd->print("INSIDE");
-        }
-        break;
-    case TAKEOFF:
-        if (checkAndSetJustEntered())
-        {
-            setState(TAKEOFF);
-            *blinking = true;
-            lcd->clear();
-            lcd->setCursor(0, 0);
-            lcd->print("TAKEOFF");
-        }
-        break;
-    case OUTSIDE:
-        if (checkAndSetJustEntered())
-        {
-            setState(OUTSIDE);
-            *blinking = false;
-            lcd->clear();
-            lcd->setCursor(0, 0);
-            lcd->print("OUTSIDE");
-        }
-        break;
-    case LANDING:
-        if (checkAndSetJustEntered())
-        {
-            setState(LANDING);
-            *blinking = false;
-            lcd->clear();
-            lcd->setCursor(0, 0);
-            lcd->print("LANDING");
-        }
-        break;
-    case ALARM:
-        if (checkAndSetJustEntered())
-        {
-            setState(ALARM);
-            *blinking = false;
-            lcd->clear();
-            lcd->setCursor(0, 0);
-            lcd->print("ALARM");
-        }
-        break;
-    default:
-        break;
     }
 }
 
