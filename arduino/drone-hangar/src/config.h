@@ -9,6 +9,8 @@
 
 #define D1 30
 #define T1 5000 // T1 in millisecondi   
+#define D2 20
+#define T2 3000 // T2 in millisecondi
 
 typedef enum
 {

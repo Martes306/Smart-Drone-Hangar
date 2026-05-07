@@ -13,7 +13,13 @@ class HangarTask : public Task
 {
 
 public:
-    HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector, Led *led, hangar_state *hangarState, alarm_state *alarmState);
+    HangarTask(
+        ServoMotor *hangarDoor,
+        ProximitySensor *droneDistanceDetector, 
+        PresenceSensor *dronePresenceDetector, 
+        Led *led, 
+        hangar_state *hangarState, 
+        alarm_state *alarmState);
     void tick();
 
 private:
@@ -42,6 +48,9 @@ private:
     hangar_state *hangarState;
     alarm_state *alarmState;
 
+    bool *drone_wants_to_takeoff;
+    bool *drone_wants_to_land;
+    
     bool conditionStarted;
     unsigned long conditionStartTime;
 };
