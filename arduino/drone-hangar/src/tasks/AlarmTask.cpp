@@ -1,4 +1,5 @@
 #include "AlarmTask.h"
+#include "devices/Button/ButtonImpl.h"
 #include <Arduino.h>
 
 AlarmTask::AlarmTask(alarm_state *alarmState)

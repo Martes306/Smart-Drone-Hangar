@@ -2,9 +2,10 @@
 #define __ALARM_TASK__
 
 #include "kernel/Task.h"
-#include "devices/Button/ButtonImpl.h"
+#include "devices/Button/Button.h"
 #include "devices/led/Led.h"
 #include "config.h"
+#include "devices/temperature/TempSensor.h"
 
 class AlarmTask : public Task
 {
@@ -28,10 +29,10 @@ private:
     long stateTimestamp;
     bool justEntered;
 
-    
     alarmState state;
+    TempSensor *tempSensor;
     alarm_state *alarmStateExternal;
-    ButtonImpl *resetButton;
+    Button *resetButton;
     Led *l3;
 };
 #endif

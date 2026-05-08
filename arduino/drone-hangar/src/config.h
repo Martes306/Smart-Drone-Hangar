@@ -6,6 +6,11 @@
 #define L2 12
 #define L3 11
 #define MOTOR_PIN 9
+#define PIR_PIN 8
+#define DISTANCE_ECHO_PIN 7
+#define DISTANCE_TRIGGER_PIN 6
+
+#define DISTANCE_TEMP 100
 
 #define D1 30
 #define T1 5000 // T1 in millisecondi   

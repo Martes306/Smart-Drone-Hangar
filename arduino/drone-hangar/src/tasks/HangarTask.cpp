@@ -1,14 +1,18 @@
 #include "HangarTask.h"
+#include "devices/ServoMotor/ServoMotorImpl.h"
+#include "devices/pir/Pir.h"
+#include "devices/ProximitySensor/Sonar.h" 
+#include "devices/led/Led.h"
 #include <Arduino.h>
 
 // aggiungere nel costruttore la varibile dell'allarme per poterla considerare prima di atterrare e prima di decollare
 
-HangarTask::HangarTask(ServoMotor *hangarDoor, ProximitySensor *droneDistanceDetector, PresenceSensor *dronePresenceDetector, Led *led, hangar_state *hangarState, alarm_state *alarmState)
+HangarTask::HangarTask(hangar_state *hangarState, alarm_state *alarmState)
 {
-    this->hangarDoor = hangarDoor;
-    this->droneDistanceDetector = droneDistanceDetector;
-    this->dronePresenceDetector = dronePresenceDetector;
-    this->led = led;
+    this->hangarDoor = new ServoMotorImpl(MOTOR_PIN);
+    this->dronePresenceDetector = new Pir(PIR_PIN);
+    this->droneDistanceDetector = new Sonar(DISTANCE_TRIGGER_PIN, DISTANCE_ECHO_PIN, DISTANCE_TEMP);
+    this->led = new Led(L1);
     this->hangarState = hangarState;
     this->alarmState = alarmState;
 
