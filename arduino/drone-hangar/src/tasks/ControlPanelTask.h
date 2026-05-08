@@ -23,6 +23,7 @@ private:
         ALARM
     } lcdState;
 
+    void updateState();
     void setState(lcdState state);
     long elapsedTimeInState();
     void log(const String &msg);
