@@ -42,7 +42,7 @@ void CommunicationTask::tick()
         // Costruiamo una stringa di telemetria (formato custom, facile da parsare in Java)
         // Esempio output: "STATE:TAKEOFF|ALARM:NO_ALARM|DIST:25.50"
         
-        String telemetry = "STATE:";
+        String telemetry = "";
         switch (*h_state) {
             case INSIDE:  telemetry += "INSIDE";  break;
             case TAKEOFF: telemetry += "TAKEOFF"; break;
@@ -50,7 +50,7 @@ void CommunicationTask::tick()
             case LANDING: telemetry += "LANDING"; break;
         }
 
-        telemetry += "|ALARM:";
+        telemetry += "|";
         switch (*a_state) {
             case NO_ALARM:  telemetry += "NO_ALARM";  break;
             case PRE_ALARM: telemetry += "PRE_ALARM"; break;
@@ -61,10 +61,10 @@ void CommunicationTask::tick()
         // Leggiamo il sensore solo se il drone è in movimento per evitare misurazioni inutili
         if (*h_state == LANDING || *h_state == TAKEOFF) {
             float dist = sonar->getDistance();
-            telemetry += "|DIST:" + String(dist);
+            telemetry += "|" + String(dist);
         } else {
             // -1 o 0 per indicare che il dato non è attualmente rilevante
-            telemetry += "|DIST:-1"; 
+            telemetry += "|-1"; 
         }
 
         // Invia il pacchetto completo al PC
