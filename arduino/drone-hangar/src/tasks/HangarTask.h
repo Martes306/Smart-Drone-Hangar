@@ -13,11 +13,7 @@ class HangarTask : public Task
 {
 
 public:
-    HangarTask(
-        ServoMotor *hangarDoor,
-        ProximitySensor *droneDistanceDetector, 
-        PresenceSensor *dronePresenceDetector, 
-        Led *led, 
+    HangarTask( 
         hangar_state *hangarState, 
         alarm_state *alarmState);
     void tick();
