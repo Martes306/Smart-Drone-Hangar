@@ -25,9 +25,12 @@ private:
     long elapsedTimeInState();
     void log(const String &msg);
     bool checkAndSetJustEntered();
+    void getTemperature();
 
     long stateTimestamp;
     bool justEntered;
+    float temp;
+    unsigned long startTime;;
 
     alarmState state;
     TempSensor *tempSensor;
