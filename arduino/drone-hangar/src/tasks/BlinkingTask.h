@@ -2,29 +2,33 @@
 #define __BLINKING_TASK__
 
 #include "kernel/Task.h"
-#include "model/Context.h"
 #include "devices/led/Led.h"
 #include <Arduino.h>
 
-class BlinkingTask: public Task {
+class BlinkingTask : public Task
+{
 
 public:
-  BlinkingTask(Led* pLed, Context* pContext); 
+  BlinkingTask(Led *pLed, bool *blinking);
   void tick();
 
-private:  
+private:
   void setState(int state);
   long elapsedTimeInState();
-  void log(const String& msg);
-  
+  void log(const String &msg);
+
   bool checkAndSetJustEntered();
-  
-  enum { OFF, ON } state;
+
+  enum
+  {
+    OFF,
+    ON
+  } state;
   long stateTimestamp;
   bool justEntered;
 
-  Led* pLed;
-  Context* pContext;
+  bool *blinking;
+  Led *pLed;
 };
 
 #endif

@@ -20,6 +20,7 @@
 #define T4 5000
 #define TEMP1 50
 #define TEMP2 60
+#define BT 5000
 
 typedef enum
 {
