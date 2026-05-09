@@ -13,20 +13,21 @@ public:
   void tick();
 
 private:
-  void setState(int state);
-  long elapsedTimeInState();
-  void log(const String &msg);
-
-  bool checkAndSetJustEntered();
-
-  enum
+  typedef enum
   {
     OFF,
     ON
-  } state;
+  } blinkingState;
+
+  void setState(blinkingState state);
+  long elapsedTimeInState();
+  void log(const String &msg);
+  bool checkAndSetJustEntered();
+
   long stateTimestamp;
   bool justEntered;
 
+  blinkingState state;
   bool *blinking;
   Led *pLed;
 };

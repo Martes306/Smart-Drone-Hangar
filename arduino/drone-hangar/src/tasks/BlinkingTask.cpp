@@ -12,17 +12,17 @@ BlinkingTask::BlinkingTask(Led *pLed, bool *blinking)
 
 void BlinkingTask::tick()
 {
-    checkAndSetJustEntered();   
+    checkAndSetJustEntered();
     if (*blinking == true)
     {
         switch (state)
         {
         case OFF:
-            pLed->switchOff();   
+            pLed->switchOff();
             if (elapsedTimeInState() > BT)
             {
                 setState(ON);
-            }   
+            }
             break;
         case ON:
             pLed->switchOn();
@@ -35,4 +35,26 @@ void BlinkingTask::tick()
             break;
         }
     }
+}
+
+void BlinkingTask::setState(blinkingState state)
+{
+    this->state = state;
+    stateTimestamp = millis();
+    justEntered = true;
+}
+
+long BlinkingTask::elapsedTimeInState()
+{
+    return millis() - stateTimestamp;
+}
+
+bool BlinkingTask::checkAndSetJustEntered()
+{
+    bool bak = justEntered;
+    if (justEntered)
+    {
+        justEntered = false;
+    }
+    return bak;
 }
