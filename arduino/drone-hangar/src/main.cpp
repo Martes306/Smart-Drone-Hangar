@@ -11,22 +11,43 @@
 
 Scheduler sched;
 
+/* Global variables declared extern in config.h */
+bool blinking;
+bool drone_wants_to_takeoff;
+bool drone_wants_to_land;
+
+/* Shared states */
+alarm_state alarmState = NO_ALARM;
+hangar_state hangarState = INSIDE;
+
 void setup()
 {
     MsgService.init();
     sched.init(50); 
 
     blinking = false;
-    alarm_state alarmState = NO_ALARM;
-    hangar_state hangarState = INSIDE;
+    drone_wants_to_land = false;
+    drone_wants_to_takeoff = false;
 
     Task* blinkingTask = new BlinkingTask(&blinking);
+    blinkingTask->init(100);
     Task* alarmTask = new AlarmTask(&alarmState);
-    Task* communicationTask = new CommunicationTask();
+    alarmTask->init(100);
+    Task* communicationTask = new CommunicationTask(&hangarState, &alarmState, &drone_wants_to_takeoff, &drone_wants_to_land);
+    communicationTask->init(100);
     Task* controlPanelTask = new ControlPanelTask(&hangarState, &alarmState, &blinking);
-    Task* hangarTask = new HangarTask(&hangarState, &alarmState);
+    controlPanelTask->init(100);
+    Task* hangarTask = new HangarTask(&hangarState, &alarmState, &drone_wants_to_takeoff, &drone_wants_to_land);
+    hangarTask->init(100);
+
+    sched.addTask(blinkingTask);
+    sched.addTask(alarmTask);
+    sched.addTask(communicationTask);
+    sched.addTask(controlPanelTask);
+    sched.addTask(hangarTask);  
 }
 
 void loop()
 {
+    sched.schedule();
 }

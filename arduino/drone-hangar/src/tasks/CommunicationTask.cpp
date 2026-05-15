@@ -1,13 +1,14 @@
 #include "CommunicationTask.h"
+#include "devices/ProximitySensor/Sonar.h"
 #include <Arduino.h>
 
-CommunicationTask::CommunicationTask(hangar_state *h_state, alarm_state *a_state, bool *takeoff_flag, bool *land_flag, ProximitySensor *sonar) 
+CommunicationTask::CommunicationTask(hangar_state *h_state, alarm_state *a_state, bool *takeoff_flag, bool *land_flag) 
 {
     this->h_state = h_state;
     this->a_state = a_state;
     this->takeoff_flag = takeoff_flag;
     this->land_flag = land_flag;
-    this->sonar = sonar;
+    this->sonar = new Sonar(DISTANCE_TRIGGER_PIN, DISTANCE_ECHO_PIN, DISTANCE_TEMP);
     this->lastTelemetryTime = 0;
 }
 

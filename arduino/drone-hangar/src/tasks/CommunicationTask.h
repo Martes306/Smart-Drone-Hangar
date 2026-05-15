@@ -9,7 +9,7 @@
 class CommunicationTask : public Task {
 
 public:
-    CommunicationTask(hangar_state *h_state, alarm_state *a_state, bool *takeoff_flag, bool *land_flag, ProximitySensor *sonar);
+    CommunicationTask(hangar_state *h_state, alarm_state *a_state, bool *takeoff_flag, bool *land_flag);
     void tick();
 
 private:

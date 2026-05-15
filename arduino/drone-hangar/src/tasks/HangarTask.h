@@ -15,7 +15,9 @@ class HangarTask : public Task
 public:
     HangarTask( 
         hangar_state *hangarState, 
-        alarm_state *alarmState);
+        alarm_state *alarmState,
+        bool *drone_wants_to_takeoff,
+        bool *drone_wants_to_land);
     void tick();
 
 private:

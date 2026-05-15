@@ -7,7 +7,7 @@
 
 // aggiungere nel costruttore la varibile dell'allarme per poterla considerare prima di atterrare e prima di decollare
 
-HangarTask::HangarTask(hangar_state *hangarState, alarm_state *alarmState)
+HangarTask::HangarTask(hangar_state *hangarState, alarm_state *alarmState, bool *drone_wants_to_takeoff, bool *drone_wants_to_land)
 {
     this->hangarDoor = new ServoMotorImpl(MOTOR_PIN);
     this->dronePresenceDetector = new Pir(PIR_PIN);
@@ -15,6 +15,8 @@ HangarTask::HangarTask(hangar_state *hangarState, alarm_state *alarmState)
     this->led = new Led(L1);
     this->hangarState = hangarState;
     this->alarmState = alarmState;
+    this->drone_wants_to_takeoff = drone_wants_to_takeoff;
+    this->drone_wants_to_land = drone_wants_to_land;
 
     state = INSIDE;
     justEntered = true;
@@ -83,7 +85,7 @@ void HangarTask::tick()
     case OUTSIDE:
         if (checkAndSetJustEntered())
         {
-            log("Drone is outside the hangar");
+            // log("Drone is outside the hangar");
             hangarDoor->setPosition(0);
         }
         if (this->drone_wants_to_land && *this->alarmState == NO_ALARM)
