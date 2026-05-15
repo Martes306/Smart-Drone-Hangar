@@ -23,7 +23,6 @@ private:
 
     void setState(alarmState state);
     long elapsedTimeInState();
-    void log(const String &msg);
     bool checkAndSetJustEntered();
     void getTemperature();
 

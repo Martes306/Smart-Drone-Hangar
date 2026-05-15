@@ -11,6 +11,7 @@ ControlPanelTask::ControlPanelTask(hangar_state *hangarState, alarm_state *alarm
     this->lcd->backlight();
     this->blinking = blinking;
     this->hangarState = hangarState;
+    this->lastHangarState = *hangarState;
     this->alarmState = alarmState;
 }
 
@@ -59,12 +60,13 @@ void ControlPanelTask::tick()
 
 void ControlPanelTask::updateState()
 {
-    if (this->state != *this->alarmState && *this->alarmState == ALARM)
+    if (this->state != ALARM && *this->alarmState == alarm_state::ALARM)
     {
         setState(ALARM);
     }
-    else if (this->state != *this->hangarState)
+    else if(this->lastHangarState != *this->hangarState)
     {
+        this->lastHangarState = *this->hangarState;
         switch (*this->hangarState)
         {
         case INSIDE:
