@@ -6,6 +6,16 @@ String content;
 MsgServiceClass MsgService;
 
 bool MsgServiceClass::isMsgAvailable(){
+  while (Serial.available() && !msgAvailable) {
+    char ch = (char) Serial.read();
+    if (ch == '\n'){
+      currentMsg = new Msg(content);
+      msgAvailable = true;      
+      content = "";
+    } else {
+      content += ch;      
+    }
+  }
   return msgAvailable;
 }
 
@@ -14,7 +24,6 @@ Msg* MsgServiceClass::receiveMsg(){
     Msg* msg = currentMsg;
     msgAvailable = false;
     currentMsg = NULL;
-    content = "";
     return msg;  
   } else {
     return NULL; 
@@ -33,21 +42,8 @@ void MsgServiceClass::sendMsg(const String& msg){
   Serial.println(msg);  
 }
 
-void serialEvent() {
-  /* reading the content */
-  while (Serial.available()) {
-    char ch = (char) Serial.read();
-    if (ch == '\n'){
-      MsgService.currentMsg = new Msg(content);
-      MsgService.msgAvailable = true;      
-    } else {
-      content += ch;      
-    }
-  }
-}
-
 bool MsgServiceClass::isMsgAvailable(Pattern& pattern){
-  return (msgAvailable && pattern.match(*currentMsg));
+  return (isMsgAvailable() && pattern.match(*currentMsg));
 }
 
 Msg* MsgServiceClass::receiveMsg(Pattern& pattern){
@@ -55,7 +51,6 @@ Msg* MsgServiceClass::receiveMsg(Pattern& pattern){
     Msg* msg = currentMsg;
     msgAvailable = false;
     currentMsg = NULL;
-    content = "";
     return msg;  
   } else {
     return NULL; 

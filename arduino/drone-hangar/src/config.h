@@ -37,6 +37,8 @@ typedef enum
     ALARM
 } alarm_state;
 
-bool blinking; 
+bool blinking;
+extern bool drone_wants_to_takeoff;
+extern bool drone_wants_to_land; 
 
 #endif
