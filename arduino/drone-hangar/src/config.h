@@ -1,14 +1,17 @@
 #ifndef __CONFIG__
 #define __CONFIG__
 
-#define BT_PIN 2
-#define L1 13
-#define L2 12
-#define L3 11
+#define TEMP_SENSOR_PIN A0
+#define LCD_SDA A4
+#define LCD_SCL A5
+#define PIR_PIN 2
+#define DISTANCE_ECHO_PIN 3
+#define DISTANCE_TRIGGER_PIN 4
+#define BT_RESET 6
 #define MOTOR_PIN 9
-#define PIR_PIN 8
-#define DISTANCE_ECHO_PIN 7
-#define DISTANCE_TRIGGER_PIN 6
+#define L1 10
+#define L2 11
+#define L3 12
 
 #define DISTANCE_TEMP 100
 

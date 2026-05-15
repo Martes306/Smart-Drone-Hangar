@@ -9,7 +9,7 @@ AlarmTask::AlarmTask(alarm_state *alarmState)
 
     this->alarmStateExternal = alarmState;
     *alarmStateExternal = NO_ALARM;
-    this->resetButton = new ButtonImpl(BT_PIN);
+    this->resetButton = new ButtonImpl(BT_RESET);
     this->l3 = new Led(11);
 }
 
