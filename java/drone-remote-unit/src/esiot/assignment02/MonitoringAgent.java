@@ -6,72 +6,49 @@ public class MonitoringAgent extends Thread {
 	DashboardView view;
 	LogView logger;
 	
-	static final String APP_PREFIX 	=  "sw:";
-	static final String LOG_PREFIX 	=  "lo:";
-	
-	// static final String MSG_STATE 		= "st:";
-	// static final String[] stateNames = {"Available", "Full", "Maintenance"}; 
-	// static final int AVAILABLE = 0;
-	// static final int FULL = 1;
-	// static final int IN_MAINTENANCE = 2;
-	
-	
 	public MonitoringAgent(SerialCommChannel channel, DashboardView view, LogView log) throws Exception {
 		this.view = view;
 		this.logger = log;
 		this.channel = channel;
 	}
 	
-	public void run(){
-		// boolean inMaintenance = false;
-		// boolean isFull = false;
-		while (true){
+	public void run() {
+		while (true) {
 			try {
 				String msg = channel.receiveMsg();
-				// logger.log("new msg: "+msg);				
-				if (msg.startsWith(APP_PREFIX)){
-					String cmd = msg.substring(APP_PREFIX.length()); 
-					logger.log("new command: "+cmd);				
-					/*
-					if (cmd.startsWith(MSG_STATE)){
-						try {
-							String args = cmd.substring(MSG_STATE.length()); 
-							
-							String[] elems = args.split(":");
-							if (elems.length >= 3) {
-								int stateCode = Integer.parseInt(elems[0]);
-								int wasteLevel = Integer.parseInt(elems[1]);
-								double temp = Double.parseDouble(elems[2]);
-		
-								view.setWasteLevel(wasteLevel);
-								view.setCurrentTemperature(temp);
-								view.setContainerState(stateNames[stateCode]);
-								
-								if (stateCode == IN_MAINTENANCE && !inMaintenance) { // maintenance
-									inMaintenance = true;
-									view.enableMaintenance();
-								} else if (stateCode == FULL && !isFull) { // maintenance
-									isFull = true;
-									view.enableDischarge();
-								} else if (stateCode == AVAILABLE && inMaintenance) {
-									inMaintenance = false;
-									view.enableAvailable();
-								} else if (stateCode == AVAILABLE && isFull) {
-									isFull = false;
-									view.enableAvailable();
-								}
-								
-							}
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							System.err.println("Error in msg: " + cmd);
-						}
+				
+				// Optional: log every message
+				// logger.log("Received: " + msg);
+				
+				// Expected format: DRONE_STATE|ALARM_STATE|DISTANCE
+				// Example: TAKEOFF|NO_ALARM|25.50
+				String[] parts = msg.split("\\|");
+				if (parts.length >= 3) {
+					String droneState = parts[0];
+					String alarmState = parts[1];
+					double distance = -1;
+					try {
+						distance = Double.parseDouble(parts[2]);
+					} catch (NumberFormatException e) {
+						// Ignore parsing errors for distance
 					}
-					*/
-				} else if (msg.startsWith(LOG_PREFIX)){
-					this.logger.log(msg.substring(LOG_PREFIX.length()));
+					
+					view.setDroneState(droneState);
+					view.setHangarState(alarmState);
+					view.setDistance(distance);
+					
+					// If the drone is outside and there's an alarm, we should log it or show it.
+					// The assignment says: "If the drone is outside the hangar, the ALARM message is also sent to the drone via DRU."
+					if ("ALARM".equals(alarmState) && "OUTSIDE".equals(droneState)) {
+						logger.log("ALARM received while drone is OUTSIDE.");
+					}
+				} else {
+					// Fallback for logging arbitrary messages (e.g., debug messages from Arduino)
+					if (!msg.trim().isEmpty()) {
+						logger.log("MSG: " + msg);
+					}
 				}
-			} catch (Exception ex){
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
