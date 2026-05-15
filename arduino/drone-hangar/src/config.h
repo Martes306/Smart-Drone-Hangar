@@ -40,6 +40,6 @@ typedef enum
     ALARM
 } alarm_state;
 
-bool blinking; 
+extern bool blinking; 
 
 #endif

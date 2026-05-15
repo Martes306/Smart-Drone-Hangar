@@ -2,10 +2,10 @@
 #include "config.h"
 #include <Arduino.h>
 
-BlinkingTask::BlinkingTask(Led *pLed, bool *blinking)
+BlinkingTask::BlinkingTask(bool *blinking)
 {
-    this->pLed = pLed;
-    this->blinking = blinking;
+    this->pLed = new Led(L2);
+    this->blk = blinking;
     this->justEntered = true;
     setState(OFF);
 }
@@ -13,7 +13,7 @@ BlinkingTask::BlinkingTask(Led *pLed, bool *blinking)
 void BlinkingTask::tick()
 {
     checkAndSetJustEntered();
-    if (*blinking == true)
+    if (*blk == true)
     {
         switch (state)
         {
@@ -37,7 +37,7 @@ void BlinkingTask::tick()
     }
 }
 
-void BlinkingTask::setState(blinkingState state)
+void BlinkingTask::setState(BlinkingState state)
 {
     this->state = state;
     stateTimestamp = millis();
@@ -58,3 +58,5 @@ bool BlinkingTask::checkAndSetJustEntered()
     }
     return bak;
 }
+
+    void log(const String &msg);

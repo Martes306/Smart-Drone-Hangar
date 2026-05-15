@@ -32,6 +32,7 @@ private:
     long stateTimestamp;
     bool justEntered;
 
+    hangar_state lastHangarState;
     lcdState state;
     bool *blinking;
     hangar_state *hangarState;

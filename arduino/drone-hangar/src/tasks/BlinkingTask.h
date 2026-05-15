@@ -9,7 +9,7 @@ class BlinkingTask : public Task
 {
 
 public:
-  BlinkingTask(Led *pLed, bool *blinking);
+  BlinkingTask(bool *blinking);
   void tick();
 
 private:
@@ -17,9 +17,9 @@ private:
   {
     OFF,
     ON
-  } blinkingState;
+  } BlinkingState;
 
-  void setState(blinkingState state);
+  void setState(BlinkingState state);
   long elapsedTimeInState();
   void log(const String &msg);
   bool checkAndSetJustEntered();
@@ -27,8 +27,8 @@ private:
   long stateTimestamp;
   bool justEntered;
 
-  blinkingState state;
-  bool *blinking;
+  BlinkingState state;
+  bool *blk;
   Led *pLed;
 };
 
