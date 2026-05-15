@@ -15,17 +15,14 @@ AlarmTask::AlarmTask(alarm_state *alarmState)
 
 void AlarmTask::tick()
 {
-    if (checkAndSetJustEntered())
-    {
-        this->startTime = millis();
-    }
+    checkAndSetJustEntered();
     switch (state)
     {
     case NOT_ALARMED:
         getTemperature();
         if (temp > TEMP1)
         {
-            if (millis() - startTime > T3)
+            if (elapsedTimeInState() > T3)
             {
                 setState(PRE_ALARMED);
                 *alarmStateExternal = PRE_ALARM;
@@ -36,8 +33,7 @@ void AlarmTask::tick()
         getTemperature();
         if (temp > TEMP2)
         {
-            this->startTime = millis();
-            if (millis() - startTime > T4)
+            if (elapsedTimeInState() > T4)
             {
                 setState(ALARMED);
                 *alarmStateExternal = ALARM;
@@ -64,4 +60,26 @@ void AlarmTask::tick()
 void AlarmTask::getTemperature()
 {
     temp = tempSensor->getTemperature();
+}
+
+void AlarmTask::setState(alarmState state)
+{
+    this->state = state;
+    stateTimestamp = millis();
+    justEntered = true;
+}
+
+long AlarmTask::elapsedTimeInState()
+{
+    return millis() - stateTimestamp;
+}
+
+bool AlarmTask::checkAndSetJustEntered()
+{
+    bool bak = justEntered;
+    if (justEntered)
+    {
+        justEntered = false;
+    }
+    return bak;
 }

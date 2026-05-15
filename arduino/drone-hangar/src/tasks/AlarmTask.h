@@ -30,7 +30,6 @@ private:
     long stateTimestamp;
     bool justEntered;
     float temp;
-    unsigned long startTime;;
 
     alarmState state;
     TempSensor *tempSensor;
