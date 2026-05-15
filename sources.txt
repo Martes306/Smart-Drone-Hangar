@@ -1,0 +1,7 @@
+java/drone-remote-unit/src/esiot/assignment02/CommChannel.java
+java/drone-remote-unit/src/esiot/assignment02/LogView.java
+java/drone-remote-unit/src/esiot/assignment02/SerialCommChannel.java
+java/drone-remote-unit/src/esiot/assignment02/DashboardController.java
+java/drone-remote-unit/src/esiot/assignment02/DashboardLauncher.java
+java/drone-remote-unit/src/esiot/assignment02/DashboardView.java
+java/drone-remote-unit/src/esiot/assignment02/MonitoringAgent.java
