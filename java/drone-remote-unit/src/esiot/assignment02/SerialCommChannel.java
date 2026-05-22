@@ -15,27 +15,27 @@ public class SerialCommChannel implements CommChannel, SerialPortEventListener {
 	public SerialCommChannel(String port, int rate) throws Exception {
 		queue = new ArrayBlockingQueue<String>(100);
 
-		try {
-			serialPort = new SerialPort(port);
-			serialPort.openPort();
-	
-			serialPort.setParams(rate,
-			                         SerialPort.DATABITS_8,
-			                         SerialPort.STOPBITS_1,
-			                         SerialPort.PARITY_NONE);
-	
-			serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
-			                                  SerialPort.FLOWCONTROL_RTSCTS_OUT);
-	
-			// serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
-			serialPort.addEventListener(this);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		serialPort = new SerialPort(port);
+		serialPort.openPort();
+
+		serialPort.setParams(rate,
+								 SerialPort.DATABITS_8,
+								 SerialPort.STOPBITS_1,
+								 SerialPort.PARITY_NONE);
+
+		serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
+										  SerialPort.FLOWCONTROL_RTSCTS_OUT);
+
+		// serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
+		serialPort.addEventListener(this);
 	}
 
 	@Override
 	public void sendMsg(String msg) {
+		if (serialPort == null || !serialPort.isOpened()) {
+			System.err.println("Error: Cannot send message, serial port is not open.");
+			return;
+		}
 		char[] array = (msg+"\n").toCharArray();
 		byte[] bytes = new byte[array.length];
 		for (int i = 0; i < array.length; i++){
@@ -68,7 +68,7 @@ public class SerialCommChannel implements CommChannel, SerialPortEventListener {
 	 */
 	public void close() {
 		try {
-			if (serialPort != null) {
+			if (serialPort != null && serialPort.isOpened()) {
 				serialPort.removeEventListener();
 				serialPort.closePort();
 			}

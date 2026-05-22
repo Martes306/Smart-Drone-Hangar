@@ -1,7 +1,7 @@
 #include "HangarTask.h"
 #include "devices/ServoMotor/ServoMotorImpl.h"
 #include "devices/pir/Pir.h"
-#include "devices/ProximitySensor/Sonar.h" 
+#include "devices/ProximitySensor/Sonar.h"
 #include "devices/led/Led.h"
 #include <Arduino.h>
 
@@ -11,12 +11,15 @@ HangarTask::HangarTask(hangar_state *hangarState, alarm_state *alarmState, bool 
 {
     this->hangarDoor = new ServoMotorImpl(MOTOR_PIN);
     this->dronePresenceDetector = new Pir(PIR_PIN);
+    dronePresenceDetector->calibrate();
     this->droneDistanceDetector = new Sonar(DISTANCE_TRIGGER_PIN, DISTANCE_ECHO_PIN, DISTANCE_TEMP);
     this->led = new Led(L1);
     this->hangarState = hangarState;
     this->alarmState = alarmState;
     this->drone_wants_to_takeoff = drone_wants_to_takeoff;
     this->drone_wants_to_land = drone_wants_to_land;
+    this->hangarDoor->on();
+    this->hangarDoor->setPosition(0);
 
     state = INSIDE;
     justEntered = true;
@@ -33,7 +36,7 @@ void HangarTask::tick()
             led->switchOn();
             hangarDoor->setPosition(0);
         }
-        if (this->drone_wants_to_takeoff && *this->alarmState == NO_ALARM)
+        if (*this->drone_wants_to_takeoff && *this->alarmState == NO_ALARM)
         {
             *drone_wants_to_takeoff = false;
             *hangarState = hangar_state::TAKEOFF;
@@ -88,7 +91,7 @@ void HangarTask::tick()
             // log("Drone is outside the hangar");
             hangarDoor->setPosition(0);
         }
-        if (this->drone_wants_to_land && *this->alarmState == NO_ALARM)
+        if (*this->drone_wants_to_land && *this->alarmState == NO_ALARM)
         {
             *drone_wants_to_land = false;
             *hangarState = hangar_state::LANDING;
@@ -96,17 +99,15 @@ void HangarTask::tick()
         }
         break;
     case LANDING:
-        if (checkAndSetJustEntered())
-        {
-            hangarDoor->setPosition(90);
-        }
+        dronePresenceDetector->sync();
         if (dronePresenceDetector->isDetected())
         {
+            hangarDoor->setPosition(90);
             // 1. Misurazione
             float dist = droneDistanceDetector->getDistance();
 
             // 2. Controllo Condizione
-            if (dist < D2)
+            if (dist < D2 && dist != NO_OBJ_DETECTED)
             {
                 if (!conditionStarted)
                 {
@@ -122,11 +123,11 @@ void HangarTask::tick()
                     if (elapsedTime > T2)
                     {
                         // TEMPO SCADUTO - AZIONE!
-                        *hangarState = hangar_state::OUTSIDE; // Aggiorna la variabile dello stato dell' hangar per comunicare con l' LCD e fargli stampare messaggi
+                        *hangarState = hangar_state::INSIDE; // Aggiorna la variabile dello stato dell' hangar per comunicare con l' LCD e fargli stampare messaggi
 
                         // Reset e transizione di stato
                         conditionStarted = false;
-                        setState(OUTSIDE);
+                        setState(INSIDE);
                     }
                 }
             }
@@ -137,6 +138,12 @@ void HangarTask::tick()
                 conditionStarted = false;
             }
         }
+        else
+        {
+            // Se il PIR non rileva più nulla, resettiamo il conteggio del sonar per sicurezza
+            conditionStarted = false;
+        }
+        break;
 
     default:
         break;

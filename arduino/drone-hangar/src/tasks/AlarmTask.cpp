@@ -1,5 +1,6 @@
 #include "AlarmTask.h"
 #include "devices/Button/ButtonImpl.h"
+#include "devices/temperature/TempSensorLM35.h"
 #include <Arduino.h>
 
 AlarmTask::AlarmTask(alarm_state *alarmState)
@@ -10,7 +11,8 @@ AlarmTask::AlarmTask(alarm_state *alarmState)
     this->alarmStateExternal = alarmState;
     *alarmStateExternal = NO_ALARM;
     this->resetButton = new ButtonImpl(BT_RESET);
-    this->l3 = new Led(11);
+    this->l3 = new Led(L3);
+    this->tempSensor = new TempSensorTMP36(TEMP_SENSOR_PIN);
 }
 
 void AlarmTask::tick()
@@ -19,6 +21,7 @@ void AlarmTask::tick()
     switch (state)
     {
     case NOT_ALARMED:
+        l3->switchOff();
         getTemperature();
         if (temp > TEMP1)
         {
@@ -30,6 +33,7 @@ void AlarmTask::tick()
         }
         break;
     case PRE_ALARMED:
+        l3->switchOff();
         getTemperature();
         if (temp > TEMP2)
         {
@@ -46,8 +50,11 @@ void AlarmTask::tick()
         }
         break;
     case ALARMED:
-        if (resetButton->isPressed())
+        l3->switchOn();
+        getTemperature();
+        if (resetButton->isPressed() && temp < TEMP2)
         {
+            l3->switchOff();
             setState(NOT_ALARMED);
             *alarmStateExternal = NO_ALARM;
         }

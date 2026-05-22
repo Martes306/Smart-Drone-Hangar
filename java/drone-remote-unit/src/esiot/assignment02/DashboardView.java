@@ -68,6 +68,9 @@ class DashboardView extends JFrame implements ActionListener {
 		
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent ev) {
+				if (controller != null) {
+					controller.close();
+				}
 				System.exit(0);
 			}
 		});

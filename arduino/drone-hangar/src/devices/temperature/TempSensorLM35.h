@@ -1,11 +1,11 @@
-#ifndef __TEMP_SENSOR_LM35__
-#define __TEMP_SENSOR_LM35__
+#ifndef __TEMP_SENSOR_TMP36__
+#define __TEMP_SENSOR_TMP36__
 
 #include "TempSensor.h"
 
-class TempSensorLM35: public TempSensor {
+class TempSensorTMP36: public TempSensor {
 public:
-  TempSensorLM35(int p);
+  TempSensorTMP36(int p);
   virtual float getTemperature();
 private:
   int pin;

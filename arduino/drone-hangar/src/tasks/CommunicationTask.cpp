@@ -23,9 +23,11 @@ void CommunicationTask::tick()
         
         // Decodifica del comando ricevuto
         if (content == "TAKEOFF") {
+            Serial.println("Received TAKEOFF command");
             *takeoff_flag = true;
         } else if (content == "LAND") {
-            *land_flag = true;
+            Serial.println("Received LAND command");
+            *land_flag = true;  
         }
         
         delete msg; // IMPORTANTISSIMO: deallocare la memoria del messaggio per evitare memory leak!

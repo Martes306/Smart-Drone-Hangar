@@ -16,14 +16,14 @@
 #define DISTANCE_TEMP 100
 
 #define D1 30
-#define T1 5000 // T1 in millisecondi   
+#define T1 500 // T1 in millisecondi   
 #define D2 20
-#define T2 3000 // T2 in millisecondi
-#define T3 3000
-#define T4 5000
-#define TEMP1 50
-#define TEMP2 60
-#define BT 5000
+#define T2 500 // T2 in millisecondi
+#define T3 500
+#define T4 500
+#define TEMP1 40
+#define TEMP2 50
+#define BT 500
 
 typedef enum
 {

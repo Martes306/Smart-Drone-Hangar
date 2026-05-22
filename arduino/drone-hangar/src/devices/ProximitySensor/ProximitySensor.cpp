@@ -3,6 +3,7 @@
 #include "Arduino.h"
 
 Sonar::Sonar(int echoP, int trigP, long maxTime) : echoPin(echoP), trigPin(trigP), timeOut(maxTime){
+  if (timeOut <= 100) timeOut = 30000; // Increase timeout if it's the too-short default or near zero
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);  
   temperature = 20; // default value
@@ -21,13 +22,14 @@ float Sonar::getDistance(){
     digitalWrite(trigPin,HIGH);
     delayMicroseconds(5);
     digitalWrite(trigPin,LOW);
-    
+
     float tUS = pulseIn(echoPin, HIGH, timeOut);
     if (tUS == 0) {
         return NO_OBJ_DETECTED;
     } else {
+        // Return distance in cm
         float t = tUS / 1000.0 / 1000.0 / 2;
-        float d = t*getSoundSpeed();
+        float d = t*getSoundSpeed() * 100;
         return d;  
     }
 }

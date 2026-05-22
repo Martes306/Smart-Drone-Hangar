@@ -35,6 +35,10 @@ void BlinkingTask::tick()
             break;
         }
     }
+    else
+    {
+        pLed->switchOff();
+    }
 }
 
 void BlinkingTask::setState(BlinkingState state)
@@ -59,4 +63,4 @@ bool BlinkingTask::checkAndSetJustEntered()
     return bak;
 }
 
-    void log(const String &msg);
+void log(const String &msg);

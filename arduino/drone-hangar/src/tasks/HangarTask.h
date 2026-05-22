@@ -3,7 +3,7 @@
 
 #include "kernel/Task.h"
 #include "devices/ServoMotor/ServoMotor.h"
-#include "devices/pir/PresenceSensor.h"
+#include "devices/pir/Pir.h"
 #include "devices/ProximitySensor/ProximitySensor.h"
 #include <WString.h>
 #include "config.h"
@@ -41,7 +41,7 @@ private:
 
     ServoMotor *hangarDoor;
     ProximitySensor *droneDistanceDetector;
-    PresenceSensor *dronePresenceDetector;
+    Pir *dronePresenceDetector;
     Led *led;
     hangar_state *hangarState;
     alarm_state *alarmState;

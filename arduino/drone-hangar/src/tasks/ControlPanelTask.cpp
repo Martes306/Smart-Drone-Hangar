@@ -41,7 +41,7 @@ void ControlPanelTask::tick()
             lcd->print("OUTSIDE");
             break;
         case LANDING:
-            *blinking = false;
+            *blinking = true;
             lcd->clear();
             lcd->setCursor(0, 0);
             lcd->print("LANDING");
@@ -64,7 +64,7 @@ void ControlPanelTask::updateState()
     {
         setState(ALARM);
     }
-    else if(this->lastHangarState != *this->hangarState)
+    else if (this->lastHangarState != *this->hangarState || (this->state == ALARM && *this->alarmState != alarm_state::ALARM))
     {
         this->lastHangarState = *this->hangarState;
         switch (*this->hangarState)

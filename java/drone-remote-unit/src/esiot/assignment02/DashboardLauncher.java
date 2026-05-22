@@ -24,7 +24,11 @@ public class DashboardLauncher {
 			view.registerController(contr);
 		} catch (Exception e) {
 			System.err.println("Could not connect to serial port " + portName);
-			System.err.println("Please specify the correct port as a command line argument.");
+			System.err.println("Error: " + e.getMessage());
+			System.err.println("Possible causes:");
+			System.err.println("1. Another program (like Arduino IDE) is using the port.");
+			System.err.println("2. You don't have enough permissions (try: sudo usermod -a -G dialout $USER).");
+			System.err.println("3. The port name is incorrect.");
 			// e.printStackTrace();
 		}
 		

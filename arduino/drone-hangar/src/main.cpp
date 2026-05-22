@@ -23,12 +23,16 @@ hangar_state hangarState = INSIDE;
 void setup()
 {
     MsgService.init();
+    MsgService.sendMsg("Arduino Hangar System Booting...");
+    
     sched.init(50); 
+    MsgService.sendMsg("Scheduler initialized.");
 
     blinking = false;
     drone_wants_to_land = false;
     drone_wants_to_takeoff = false;
 
+    MsgService.sendMsg("Initializing tasks...");
     Task* blinkingTask = new BlinkingTask(&blinking);
     blinkingTask->init(100);
     Task* alarmTask = new AlarmTask(&alarmState);

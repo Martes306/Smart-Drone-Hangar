@@ -5,6 +5,7 @@ public class MonitoringAgent extends Thread {
 	SerialCommChannel channel;
 	DashboardView view;
 	LogView logger;
+	private volatile boolean stopped = false;
 	
 	public MonitoringAgent(SerialCommChannel channel, DashboardView view, LogView log) throws Exception {
 		this.view = view;
@@ -13,12 +14,9 @@ public class MonitoringAgent extends Thread {
 	}
 	
 	public void run() {
-		while (true) {
+		while (!stopped) {
 			try {
 				String msg = channel.receiveMsg();
-				
-				// Optional: log every message
-				// logger.log("Received: " + msg);
 				
 				// Expected format: DRONE_STATE|ALARM_STATE|DISTANCE
 				// Example: TAKEOFF|NO_ALARM|25.50
@@ -48,10 +46,19 @@ public class MonitoringAgent extends Thread {
 						logger.log("MSG: " + msg);
 					}
 				}
+			} catch (InterruptedException ex) {
+				// Thread interrupted, exiting loop
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				if (!stopped) {
+					ex.printStackTrace();
+				}
 			}
 		}
+	}
+
+	public void stopAgent() {
+		stopped = true;
+		this.interrupt();
 	}
 
 }
