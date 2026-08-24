@@ -20,6 +20,7 @@ public class DashboardController {
 		System.out.println("Ready.");		
 	}
 	
+	// Operation to close the controller and the monitoring agent
 	public void close() {
 		if (agent != null) {
 			agent.stopAgent();
@@ -29,11 +30,13 @@ public class DashboardController {
 		}
 	}
 	
+	// Send a TAKEOFF command to the Arduino via the serial channel
 	public void sendTakeOff() {
 		channel.sendMsg("TAKEOFF");
 		if (logger != null) logger.log("Sent command: TAKEOFF");
 	}
 
+	// Send a LAND command to the Arduino via the serial channel
 	public void sendLand() {
 		channel.sendMsg("LAND");
 		if (logger != null) logger.log("Sent command: LAND");

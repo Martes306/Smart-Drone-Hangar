@@ -86,18 +86,21 @@ class DashboardView extends JFrame implements ActionListener {
 		this.controller = contr;
 	}
 
+	// Update the drone state label in the GUI
 	public void setDroneState(String state) {
 		SwingUtilities.invokeLater(() -> {
 			lblDroneState.setText("Drone State: " + state); 
 		});
 	}
 
+	// Update the hangar state label in the GUI
 	public void setHangarState(String state) {
 		SwingUtilities.invokeLater(() -> {
 			lblHangarState.setText("Hangar State: " + state);
 		});
 	}
 
+	// Update the distance label in the GUI
 	public void setDistance(double dist) {
 		SwingUtilities.invokeLater(() -> {
 			if (dist < 0) {
@@ -108,6 +111,7 @@ class DashboardView extends JFrame implements ActionListener {
 		});
 	}
 	
+	// Handle button clicks for Take Off and Land commands
 	public void actionPerformed(ActionEvent ev) {
 		try {
 			if (ev.getSource() == btnTakeOff) {

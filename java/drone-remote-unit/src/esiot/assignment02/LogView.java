@@ -20,6 +20,7 @@ class LogView extends JFrame  {
     this.getContentPane().add(mainPanel);
   }
 
+  // Add a message in the bottom of the text area 
   public void log(String msg){
     SwingUtilities.invokeLater(() -> {
       String date = new Date().toString();
@@ -27,6 +28,7 @@ class LogView extends JFrame  {
     });
   }
 
+  // Make the log window visible
   public void display() {
     SwingUtilities.invokeLater(() -> {
       this.setVisible(true);
