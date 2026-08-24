@@ -21,8 +21,8 @@
 #define T2 500 // T2 in millisecondi
 #define T3 500
 #define T4 500
-#define TEMP1 40
-#define TEMP2 50
+#define TEMP1 35
+#define TEMP2 80
 #define BT 500
 
 typedef enum
